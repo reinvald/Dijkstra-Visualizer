@@ -55,7 +55,7 @@ class Graph:
 
         # init distance of source node and build unvisited minheap
         self.graph[s].distance = 0
-        unvisited = MinHeap(g.graph)
+        unvisited = MinHeap(self.graph)
 
         while (unvisited.currSize > 0):
 
@@ -74,6 +74,7 @@ class Graph:
                   ' to ' + u + ': ' + str(v.distance))
 
 
+# MinHeap class
 class MinHeap:
     def __init__(self, graph):
         self.maxSize = len(graph)
@@ -148,22 +149,75 @@ class MinHeap:
         return self.heap[self.min]
 
 
-# REPLACE WITH GRAPH CREATION FROM USER INPUT
-g = Graph()
-g.add_node('A')
-g.add_node('B')
-g.add_node('C')
-g.add_node('D')
-g.add_node('E')
-g.add_edge('A', 'B', 4)
-g.add_edge('A', 'C', 2)
-g.add_edge('B', 'C', 3)
-g.add_edge('C', 'B', 1)
-g.add_edge('B', 'D', 2)
-g.add_edge('B', 'E', 3)
-g.add_edge('C', 'D', 4)
-g.add_edge('C', 'E', 5)
-g.add_edge('E', 'D', 1)
-g.Dijkstra('A')
-# g.print_graph()
-# mh = MinHeap(g.graph)
+def main():
+
+    print('*********************************************')
+    print('n: add a node')
+    print('e: add/replace an edge')
+    print('v: see the graph as it currently stands')
+    print('d: run Dijkstra\'s algorithm')
+    print('x: exit program')
+    print('*********************************************')
+
+    # initialize graph
+    g = Graph()
+
+    # prompt user
+    while True:
+        action = raw_input('please select an action: ')
+
+        if action == 'n':
+            nodeName = raw_input('please enter a unique node name: ')
+
+            if nodeName in g.graph:
+                print('node with that name already exists...')
+                continue
+            g.add_node(nodeName)
+        elif action == 'e':
+            fromNode = raw_input('add an edge coming from: ')
+            if fromNode not in g.graph:
+                print('node does not exist!')
+                continue
+            toNode = raw_input('and going to: ')
+            if toNode not in g.graph:
+                print('node does not exist!')
+                continue
+            weight = raw_input('with edge weight (no negative numbers!): ')
+            try:
+                weight = float(weight)
+            except ValueError:
+                print('invalid weight!')
+                continue
+            if weight < 0:
+                print('no negative weights allowed!')
+                continue
+            g.add_edge(fromNode, toNode, weight)
+        elif action == 'v':
+            print('v')
+        elif action == 'd':
+            print('d')
+        elif action == 'x':
+            print('x')
+            return
+        else:
+            print('invalid action! try again!')
+
+    g.add_node('A')
+    g.add_node('B')
+    g.add_node('C')
+    g.add_node('D')
+    g.add_node('E')
+    g.add_edge('A', 'B', 4)
+    g.add_edge('A', 'C', 2)
+    g.add_edge('B', 'C', 3)
+    g.add_edge('C', 'B', 1)
+    g.add_edge('B', 'D', 2)
+    g.add_edge('B', 'E', 3)
+    g.add_edge('C', 'D', 4)
+    g.add_edge('C', 'E', 5)
+    g.add_edge('E', 'D', 1)
+    g.Dijkstra('A')
+
+
+if __name__ == "__main__":
+    main()
