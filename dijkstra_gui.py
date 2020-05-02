@@ -1,6 +1,7 @@
 # GUI based implementation of Dijkstra's algorithm
 import sys
 import networkx as nx
+import matplotlib.pyplot as plt
 
 
 # Node class
@@ -165,25 +166,25 @@ def main():
 
     # prompt user
     while True:
-        action = raw_input('please select an action: ')
+        action = input('please select an action: ')
 
         if action == 'n':
-            nodeName = raw_input('please enter a unique node name: ')
+            nodeName = input('please enter a unique node name: ')
 
             if nodeName in g.graph:
                 print('node with that name already exists...')
                 continue
             g.add_node(nodeName)
         elif action == 'e':
-            fromNode = raw_input('coming from: ')
+            fromNode = input('coming from: ')
             if fromNode not in g.graph:
                 print('node does not exist!')
                 continue
-            toNode = raw_input('and going to: ')
+            toNode = input('and going to: ')
             if toNode not in g.graph:
                 print('node does not exist!')
                 continue
-            weight = raw_input('with edge weight (no negative numbers!): ')
+            weight = input('with edge weight (no negative numbers!): ')
             try:
                 weight = float(weight)
             except ValueError:
@@ -200,14 +201,23 @@ def main():
 
             DG = nx.DiGraph()
 
+            for u in g.graph.keys():
+                DG.add_node(u,)
+
             for u, v in g.graph.items():
                 for n, w in v.neighbors.items():
                     DG.add_edge(u, n, weight=w)
 
             # draw graph
+            pos = nx.random_layout(DG)
+            nx.draw(DG, pos, with_labels=True)
+            labels = nx.get_edge_attributes(DG, 'weight')
+            nx.draw_networkx_edge_labels(DG, pos, edge_labels=labels)
+            plt.draw()
+            plt.show()
 
         elif action == 'd':
-            start = raw_input('node to run Dijkstra\'s algorithm from: ')
+            start = input('node to run Dijkstra\'s algorithm from: ')
 
             if start not in g.graph:
                 print('node does not exist in the graph...')
