@@ -1,5 +1,6 @@
 # GUI based implementation of Dijkstra's algorithm
 import sys
+import networkx as nx
 
 
 # Node class
@@ -153,8 +154,8 @@ def main():
 
     print('*********************************************')
     print('n: add a node')
-    print('e: add/replace an edge')
-    print('v: see the graph as it currently stands')
+    print('e: add an edge')
+    print('g: see the graph as it currently stands')
     print('d: run Dijkstra\'s algorithm')
     print('x: exit program')
     print('*********************************************')
@@ -174,7 +175,7 @@ def main():
                 continue
             g.add_node(nodeName)
         elif action == 'e':
-            fromNode = raw_input('add an edge coming from: ')
+            fromNode = raw_input('coming from: ')
             if fromNode not in g.graph:
                 print('node does not exist!')
                 continue
@@ -192,31 +193,31 @@ def main():
                 print('no negative weights allowed!')
                 continue
             g.add_edge(fromNode, toNode, weight)
-        elif action == 'v':
-            print('v')
+        elif action == 'g':
+            if len(g.graph) == 0:
+                print('there are no nodes in the graph!')
+                continue
+
+            DG = nx.DiGraph()
+
+            for u, v in g.graph.items():
+                for n, w in v.neighbors.items():
+                    DG.add_edge(u, n, weight=w)
+
+            # draw graph
+
         elif action == 'd':
-            print('d')
+            start = raw_input('node to run Dijkstra\'s algorithm from: ')
+
+            if start not in g.graph:
+                print('node does not exist in the graph...')
+                continue
+
+            g.Dijkstra(start)
         elif action == 'x':
-            print('x')
             return
         else:
             print('invalid action! try again!')
-
-    g.add_node('A')
-    g.add_node('B')
-    g.add_node('C')
-    g.add_node('D')
-    g.add_node('E')
-    g.add_edge('A', 'B', 4)
-    g.add_edge('A', 'C', 2)
-    g.add_edge('B', 'C', 3)
-    g.add_edge('C', 'B', 1)
-    g.add_edge('B', 'D', 2)
-    g.add_edge('B', 'E', 3)
-    g.add_edge('C', 'D', 4)
-    g.add_edge('C', 'E', 5)
-    g.add_edge('E', 'D', 1)
-    g.Dijkstra('A')
 
 
 if __name__ == "__main__":
