@@ -11,6 +11,7 @@ class Node:
         self.neighbors = {}
         self.distance = sys.maxsize
         self.parent = None
+        self.parentEdgeWeight = None
 
     def add_neighbor(self, neighbor, weight):
         if (neighbor not in self.neighbors):
@@ -69,6 +70,7 @@ class Graph:
                 if (self.graph[n].distance > current_node.distance + w):
                     self.graph[n].distance = current_node.distance + w
                     self.graph[n].parent = current_node.name
+                    self.graph[n].parentEdgeWeight = w
             unvisited.extract()
 
         for u, v in self.graph.items():
@@ -202,7 +204,7 @@ def main():
             DG = nx.DiGraph()
 
             for u in g.graph.keys():
-                DG.add_node(u,)
+                DG.add_node(u)
 
             for u, v in g.graph.items():
                 for n, w in v.neighbors.items():
@@ -224,6 +226,24 @@ def main():
                 continue
 
             g.Dijkstra(start)
+
+            DG = nx.DiGraph()
+
+            for u in g.graph.keys():
+                DG.add_node(u)
+
+            for u, v in g.graph.items():
+                if (v.parent != None):
+                    DG.add_edge(v.parent, u, weight=v.parentEdgeWeight)
+
+            # draw graph
+            pos = nx.random_layout(DG)
+            nx.draw(DG, pos, with_labels=True)
+            labels = nx.get_edge_attributes(DG, 'weight')
+            nx.draw_networkx_edge_labels(DG, pos, edge_labels=labels)
+            plt.draw()
+            plt.show()
+
         elif action == 'x':
             return
         else:
